@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { CreatePermissionDto, UpdatePermissionDto } from 'src/database/dto/permission.dto';
 import { PermissionService } from './permission.service';
-import { CreatePermissionDto } from './dto/create-permission.dto';
-import { UpdatePermissionDto } from './dto/update-permission.dto';
 
 @Controller('permission')
 export class PermissionController {
