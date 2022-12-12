@@ -1,31 +1,36 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Role } from 'src/database/entities/role.schema';
+import path from 'path';
+import { CreateRolePermissionDto } from 'src/database/dto/role_permission.dto';
+import { Role, RoleDocument } from 'src/database/entities/role.schema';
 import { RolePermission } from 'src/database/entities/role_permission.schema';
 import { CreateRoleDto, UpdateRoleDto } from '../database/dto/role.dto';
 
 @Injectable()
 export class RoleService {
+
   constructor(
-    @InjectModel(Role.name) private roleModel: Model<Role>,
+    @InjectModel(Role.name) private roleModel: Model<RoleDocument>,
     @InjectModel(RolePermission.name) private rolePermissionModel: Model<RolePermission>,
   ) { }
   async create(createRoleDto: CreateRoleDto) {
-    const { name, permissionIds } = createRoleDto;
+    const { name, permissions } = createRoleDto;
 
     //create role
-    const createRole = new this.roleModel({ name });
+    const createRole = new this.roleModel(createRoleDto);
+    await createRole.populate('permissions')
+    return createRole.save();
     const role = await createRole.save();
 
     //create rolePermission
-    const rolePermissions = this.createRolePermisssionMany(role.id, permissionIds);
+    const rolePermissions = await this.createRolePermisssionMany(role.id, permissions);
 
     return { role, rolePermissions };
   }
 
   findAll() {
-    return this.roleModel.find();
+    return this.roleModel.find()
   }
 
   async findOne(id: string) {
@@ -36,18 +41,22 @@ export class RoleService {
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto) {
-    const { name, permissionIds } = updateRoleDto;
+    const { name, permissions } = updateRoleDto;
 
     //update role
-    const role = await this.roleModel.findByIdAndUpdate(id, { name: name })
-      .catch((err) => { throw new BadRequestException(err) });
-    if (!role) {
-      throw new BadRequestException('Not found role');
+    let role: any;
+    if (name) {
+      role = await this.roleModel.findByIdAndUpdate(id, { name: name })
+        .catch((err) => { throw new BadRequestException(err) });
+      if (!role) {
+        throw new BadRequestException('Not found role');
+      }
     }
+
     //create rolePermission
     let rolePermission: any;
-    if (permissionIds) {
-      rolePermission = await this.createRolePermisssionMany(id, permissionIds)
+    if (permissions) {
+      rolePermission = await this.createRolePermisssionMany(id, permissions)
         .catch(err => { throw new BadRequestException(err) });
     }
     return { role, rolePermission };
@@ -59,19 +68,31 @@ export class RoleService {
       .catch(err => err);
   }
 
-  private async createRolePermisssionMany(roleId: string, permissionIds: string[]) {
-    await this.rolePermissionModel.deleteMany({ roleId: roleId });
+  async getPermissionByRoleId(roleId: string) {
+    return this.roleModel.findById(roleId).populate('permissions')
+      
+    const pers = await this.rolePermissionModel.find({ role: {_id: roleId} })
+      .populate('permission')
+      .catch(err => err);
 
-    let rolePers = permissionIds.map((perId) => {
-      const rolePer: RolePermission = {
-        roleId: roleId,
-        permissionId: perId,
+    return pers;
+  }
+
+  //////////// PRIVATE METHOD ///////////////////
+  private async createRolePermisssionMany(roleId: string, permissions: RolePermission[]) {
+    await this.rolePermissionModel.deleteMany({ role: {roleId }});
+
+    let rolePers = permissions.map((per) => {
+      const rolePer = {
+        role: { roleId },
+        permission: per
       };
       return rolePer;
 
     });
 
-    return this.rolePermissionModel.insertMany(rolePers);
+    return await this.rolePermissionModel.insertMany(rolePers);
   }
+
 
 }

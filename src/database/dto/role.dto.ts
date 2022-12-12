@@ -1,5 +1,6 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { ArrayNotEmpty, IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { RolePermission } from "../entities/role_permission.schema";
 export class CreateRoleDto {
     @ApiProperty()
     @IsString()
@@ -12,6 +13,6 @@ export class CreateRoleDto {
     @IsString({each: true})
     @IsNotEmpty({each: true})
     @IsOptional()
-    permissionIds: string[];
+    permissions: RolePermission[];
 }
 export class UpdateRoleDto extends PartialType(CreateRoleDto) { }

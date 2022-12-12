@@ -32,4 +32,5 @@ export class RolePermissionController {
   remove(@Param('id') id: string) {
     return this.rolePermissionService.remove(id);
   }
+
 }
