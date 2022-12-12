@@ -14,19 +14,11 @@ export class RoleService {
     @InjectModel(Role.name) private roleModel: Model<RoleDocument>,
     @InjectModel(RolePermission.name) private rolePermissionModel: Model<RolePermission>,
   ) { }
+
   async create(createRoleDto: CreateRoleDto) {
-    const { name, permissions } = createRoleDto;
-
-    //create role
-    const createRole = new this.roleModel(createRoleDto);
-    await createRole.populate('permissions')
-    return createRole.save();
-    const role = await createRole.save();
-
-    //create rolePermission
-    const rolePermissions = await this.createRolePermisssionMany(role.id, permissions);
-
-    return { role, rolePermissions };
+    const createdItem = new this.roleModel(createRoleDto);
+    await createdItem.populate('permissions');
+    return createdItem.save();
   }
 
   findAll() {

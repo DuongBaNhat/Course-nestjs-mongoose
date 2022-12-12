@@ -1,28 +1,19 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
-import { Transform, Type } from 'class-transformer';
-import { HydratedDocument, Types , Document} from "mongoose";
-import { Role } from "./role.schema";
-import { RolePermission } from "./role_permission.schema";
+import { Transform } from 'class-transformer';
+import { Document, ObjectId } from "mongoose";
+
 export type PermissionDocument = Permission & Document;
-
-// export type PermissionDocument = HydratedDocument<Permission>;
-
 @Schema()
 export class Permission {
+    @Transform(({ value }) => value.toString())
+    _id: ObjectId;
+
     @Prop()
     name: string;
 
     @Prop()
     code: string;
-    
-    @Prop({
-        type: [{ type: Types.ObjectId, ref: Role.name }],
-    })
-    @Type(() => Role)
-    roles: Role;
-    // @Prop({ type: [{ type: Types.ObjectId, ref: 'RolePermission' }] })
-    // rolePemissions: RolePermission[];
 
 }
 
