@@ -7,8 +7,10 @@ export class CreateRoleDto {
     name: string;
 
     @ApiProperty()
-    @IsArray({each: true})
+    @IsArray()
     @ArrayNotEmpty()
+    @IsString({each: true})
+    @IsNotEmpty({each: true})
     @IsOptional()
     permissionIds: string[];
 }

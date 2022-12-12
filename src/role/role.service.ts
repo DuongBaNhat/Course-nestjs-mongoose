@@ -6,7 +6,7 @@ import { RolePermission } from 'src/database/entities/role_permission.schema';
 import { CreateRoleDto, UpdateRoleDto } from '../database/dto/role.dto';
 
 @Injectable()
-export class RoleService { 
+export class RoleService {
   constructor(
     @InjectModel(Role.name) private roleModel: Model<Role>,
     @InjectModel(RolePermission.name) private rolePermissionModel: Model<RolePermission>,
@@ -41,7 +41,9 @@ export class RoleService {
     //update role
     const role = await this.roleModel.findByIdAndUpdate(id, { name: name })
       .catch((err) => { throw new BadRequestException(err) });
-
+    if (!role) {
+      throw new BadRequestException('Not found role');
+    }
     //create rolePermission
     let rolePermission: any;
     if (permissionIds) {
@@ -53,7 +55,7 @@ export class RoleService {
 
   async remove(id: string) {
     await this.rolePermissionModel.deleteMany({ roleId: id });
-    return await this.roleModel.deleteOne({_id: id})
+    return await this.roleModel.deleteOne({ _id: id })
       .catch(err => err);
   }
 
