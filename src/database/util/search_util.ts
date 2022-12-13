@@ -17,10 +17,16 @@ export class SearchFilter {
     @Min(1)
     size?: number;
 
+    @ApiProperty({ required: false, default: 'descend-_id' })
+    @IsString()
+    @IsOptional()
+    sort?: string;
+
     @ApiProperty({ required: false })
     @IsString()
     @IsOptional()
     textSearch?: string;
 }
+
 
 

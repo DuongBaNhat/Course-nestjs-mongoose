@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumberString, IsString } from "class-validator";
+import { ArrayNotEmpty, IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateCourseDto {
     @ApiProperty()
@@ -18,7 +18,7 @@ export class CreateCourseDto {
     image: string;
 
     @ApiProperty()
-    @IsNumberString()
+    @IsNumber()
     @IsNotEmpty()
     price: number;
 
@@ -26,6 +26,28 @@ export class CreateCourseDto {
     @IsString()
     @IsNotEmpty()
     author: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    @IsOptional()
+    level: string;
+
+    @ApiProperty()
+    @IsArray()
+    @ArrayNotEmpty()
+    @IsString({ each: true })
+    @IsNotEmpty({ each: true })
+    @IsOptional()
+    lessons: string[];
+
+    @ApiProperty()
+    @IsArray()
+    @ArrayNotEmpty()
+    @IsString({ each: true })
+    @IsNotEmpty({ each: true })
+    @IsOptional()
+    categorys: string[];
 
 }
 export class UpdateCourseDto extends PartialType(CreateCourseDto) { }
