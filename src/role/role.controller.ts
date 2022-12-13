@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { RoleService } from './role.service';
-import { CreateRoleDto, UpdateRoleDto } from '../database/dto/role.dto';
+import { CreateRoleDto, RoleSearchFilter, UpdateRoleDto } from '../database/dto/role.dto';
 import { ApiTags } from '@nestjs/swagger/dist';
+import { PaginationParams } from 'src/database/util/pagination.util';
 
 @ApiTags('role')
 @Controller('role')
@@ -14,8 +15,8 @@ export class RoleController {
   }
 
   @Get()
-  findAll() {
-    return this.roleService.findAll();
+  findAll(@Query() filter: PaginationParams) {
+    return this.roleService.findAll(filter);
   }
 
   @Get(':id')
