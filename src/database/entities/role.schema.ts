@@ -1,4 +1,3 @@
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform, Type } from 'class-transformer';
 import * as mongoose from 'mongoose';
@@ -12,7 +11,7 @@ export class Role {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
  
-  @Prop()
+  @Prop({index: true})
   name: string;
    
   @Prop({
@@ -21,5 +20,8 @@ export class Role {
   @Type(() => Permission)
   permissions: Permission;
 }
- 
-export const RoleSchema = SchemaFactory.createForClass(Role);
+
+const RoleSchema = SchemaFactory.createForClass(Role);
+RoleSchema.index({ name: 'text' });
+
+export {RoleSchema};
