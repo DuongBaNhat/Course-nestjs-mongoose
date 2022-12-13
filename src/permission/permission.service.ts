@@ -17,15 +17,16 @@ export class PermissionService {
     return this.permissionModel.find();
   }
 
-  findOne(id: string) {
-    return this.permissionModel.findById(id);
+  async findOne(id: string) {
+    return this.permissionModel.findById(id).catch(err => err);
   }
 
-  update(id: string, updatePermissionDto: UpdatePermissionDto) {
-    return this.permissionModel.findByIdAndUpdate(id, updatePermissionDto);
+  async update(id: string, updatePermissionDto: UpdatePermissionDto) {
+    return this.permissionModel.findByIdAndUpdate(id, updatePermissionDto)
+      .catch(err => err);
   }
 
-  remove(id: string) {
-    return this.permissionModel.findByIdAndDelete(id);
+  async remove(id: string) {
+    return this.permissionModel.findByIdAndDelete(id).catch(err => err);
   }
 }
