@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { Category, CategoryDocument } from 'src/database/entities/category.schema';
+import { PaginationParam, toPaginationResponse } from 'src/database/util/pagination.util';
 import { SearchFilter } from 'src/database/util/search_util';
 import { CreateCategoryDto, UpdateCategoryDto } from '../../database/dto/category.dto';
 
@@ -17,8 +18,7 @@ export class CategoryService {
   }
 
   async findAll(filter: SearchFilter) {
-    const { page, size, textSearch } = filter;
-    const skip = (page - 1) * size, limit = size;
+    const { page, size, textSearch, sort } = filter;
 
     let filters: FilterQuery<CategoryDocument> = {};
     //search
@@ -28,12 +28,17 @@ export class CategoryService {
       };
     }
 
-    const total = await this.categoryModel.find(filters).count();
-
     let query = this.categoryModel.find(filters);
-    const content = await query.sort({ _id: 1 }).skip(skip).limit(limit);
-
-    return { content, total, page, size };
+    const total = await this.categoryModel.find(filters).count();
+    //pagination
+    const param: PaginationParam = {
+      query: query,
+      total: total,
+      page: page,
+      size: size,
+      sort: sort
+    }
+    return await toPaginationResponse(param);
   }
 
   async findOne(id: string) {
