@@ -1,10 +1,17 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
-import { IsString, IsNotEmpty } from "class-validator";
+import { Type } from "class-transformer";
+import { IsString, IsNotEmpty, IsNumber, Min } from "class-validator";
 
 export class CreateCategoryDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
     name: string;
+
+    @ApiProperty({default: 1})
+    @Type(() => Number)
+    @IsNumber()
+    @Min(1)
+    order: number;
 }
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) { }

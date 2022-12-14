@@ -10,6 +10,11 @@ export class CreateCourseDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
+    time: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     description: string;
 
     @ApiProperty()
