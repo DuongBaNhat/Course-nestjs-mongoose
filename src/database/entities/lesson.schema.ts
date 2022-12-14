@@ -11,6 +11,9 @@ export class Lesson {
 
   @Prop({ index: true })
   name: string;
+
+  @Prop()
+  url: string;
 }
 
 const LessonSchema = SchemaFactory.createForClass(Lesson);

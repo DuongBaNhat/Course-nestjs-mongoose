@@ -11,6 +11,9 @@ export class Category {
 
   @Prop({ index: true })
   name: string;
+
+  @Prop()
+  order: number;
 }
 
 const CategorySchema = SchemaFactory.createForClass(Category);

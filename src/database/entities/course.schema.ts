@@ -17,6 +17,9 @@ export class Course {
     @Prop({ index: true })
     name: string;
 
+    @Prop()
+    time: string;
+
     @Prop({
         type: mongoose.Schema.Types.ObjectId, ref: Level.name
     })
