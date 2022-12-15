@@ -9,8 +9,18 @@ export class OrderItem {
     @Transform(({ value }) => value.toString())
     _id: ObjectId;
 
-    @Prop({ index: true })
+    @Prop()
+    idItem: string;
+
+    @Prop()
     name: string;
+
+    @Prop()
+    amount: number;
+
+    @Prop()
+    price: number;
+
 
 }
 const OrderItemSchema = SchemaFactory.createForClass(OrderItem);

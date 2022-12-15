@@ -20,6 +20,23 @@ export class Order {
     @Type(() => OrderItem)
     items: OrderItem;
 
+    @Prop()
+    status: string;
+
+    @Prop()
+    total: number;
+
+    @Prop()
+    discount: string;
+
+    @Prop()
+    email: string;
+
+    @Prop()
+    address: string;
+
+    @Prop()
+    date: string;
 
 }
 const OrderSchema = SchemaFactory.createForClass(Order);
