@@ -1,3 +1,5 @@
+import { Order, OrderSchema } from "src/database/entities/order.schema"
+import { OrderItem, OrderItemSchema } from "src/database/entities/order_items.schema"
 import { Category, CategorySchema } from "../../database/entities/category.schema"
 import { Course, CourseSchema } from "../../database/entities/course.schema"
 import { Lesson, LessonSchema } from "../../database/entities/lesson.schema"
@@ -13,5 +15,8 @@ export const modules = () => {
         { name: Course.name, schema: CourseSchema },
         { name: Lesson.name, schema: LessonSchema },
         { name: Level.name, schema: LevelSchema },
+        { name: Order.name, schema: OrderSchema },
+        { name: OrderItem.name, schema: OrderItemSchema },
+
     ]
 }

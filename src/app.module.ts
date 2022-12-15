@@ -10,7 +10,8 @@ import { LevelModule } from './modules/level/level.module';
 import { LessonModule } from './modules/lesson/lesson.module';
 import { CategoryModule } from './modules/category/category.module';
 import { CourseModule } from './modules/course/course.module';
-import { ExceptionCommon } from './common/exception.common';
+import { OrderItemsModule } from './modules/order_items/order_items.module';
+import { OrderModule } from './modules/order/order.module';
 
 function myFunction(arg: CategoryModule) {
   console.log(getConfig());
@@ -24,6 +25,8 @@ function myFunction(arg: CategoryModule) {
     LessonModule,
     CategoryModule,
     CourseModule,
+    OrderModule,
+    OrderItemsModule,
   ],
   controllers: [AppController],
   providers: [

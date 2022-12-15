@@ -19,7 +19,11 @@ export class ExceptionCommon implements ExceptionFilter {
         const responseBody: ResponseTransform = {
             status: 'error',
             status_code: httpStatus,
-            data: { name: exception.name, message: exception.message },
+            data: {
+                name: exception.name,
+                message: exception.message,
+                response: exception.response?.message
+            },
         }
 
         console.log(`>>>>>
