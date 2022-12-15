@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
+import { Min } from 'class-validator';
 import { Document, ObjectId } from 'mongoose';
 
 export type CategoryDocument = Category & Document;
@@ -12,7 +13,8 @@ export class Category {
   @Prop({ index: true })
   name: string;
 
-  @Prop()
+  @Prop({min: 1})
+  @Min(1)
   order: number;
 }
 
