@@ -2,12 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { LevelService } from './level.service';
 import { CreateLevelDto, UpdateLevelDto } from '../../database/dto/level.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { SearchFilter } from 'src/database/util/search_util';
+import { SearchFilter } from 'src/common/util/search.util';
 
 @ApiTags('level')
 @Controller('level')
 export class LevelController {
-  constructor(private readonly levelService: LevelService) {}
+  constructor(private readonly levelService: LevelService) { }
 
   @Post()
   create(@Body() createLevelDto: CreateLevelDto) {
@@ -33,4 +33,15 @@ export class LevelController {
   remove(@Param('id') id: string) {
     return this.levelService.remove(id);
   }
+
+  @Patch('up/:id')
+  up(@Param('id') id: string) {
+    return this.levelService.up(id);
+  }
+
+  @Patch('down/:id')
+  down(@Param('id') id: string) {
+    return this.levelService.down(id);
+  }
+
 }
