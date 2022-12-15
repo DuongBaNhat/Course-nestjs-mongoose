@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
-import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty, IsOptional } from "class-validator";
+import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty, IsOptional, IsDate, IsNumber, IsDateString } from "class-validator";
 
 export class CreateOrderDto {
     @ApiProperty()
@@ -14,6 +14,37 @@ export class CreateOrderDto {
     @IsNotEmpty({ each: true })
     @IsOptional()
     items: string[];
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    status: string;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    total: number;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    discount: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    email: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    address: string;
+
+    @ApiProperty()
+    @IsDateString()
+    @IsNotEmpty()
+    date: Date;
+
 }
 export class UpdateOrderDto extends PartialType(CreateOrderDto) { }
 
