@@ -4,8 +4,8 @@ import { FilterQuery, Model } from 'mongoose';
 import { Category, CategoryDocument } from 'src/database/entities/category.schema';
 import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
 import { SearchFilter } from 'src/common/util/search.util';
-import { CreateCategoryDto, UpCategoryDto, UpdateCategoryDto } from '../../database/dto/category.dto';
-import { downUtil, upUtil } from 'src/common/util/function.util';
+import { CreateCategoryDto, UpdateCategoryDto } from '../../database/dto/category.dto';
+import { downUtil, upUtil, createOrder, getOrderMax } from 'src/common/util/function.util';
 
 @Injectable()
 export class CategoryService {
@@ -15,8 +15,9 @@ export class CategoryService {
   ) { }
 
   async create(createCategoryDto: CreateCategoryDto) {
-    const createdItem = new this.categoryModel(createCategoryDto);
-    return await createdItem.save().catch(err => err);
+    const orderMax = await getOrderMax(this.categoryModel);
+    const createdItem = new this.categoryModel({ ...createCategoryDto, order: (orderMax + 1)});
+    return await createdItem.save();
   }
 
   async findAll(filter: SearchFilter) {
@@ -48,8 +49,7 @@ export class CategoryService {
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
-    return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto)
-      .catch(err => err);
+    return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto);
   }
 
   async remove(id: string) {

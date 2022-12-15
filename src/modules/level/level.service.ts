@@ -6,7 +6,7 @@ import { Level, LevelDocument } from 'src/database/entities/level.schema';
 import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
 import { SearchFilter } from 'src/common/util/search.util';
 import { CreateLevelDto, UpdateLevelDto } from '../../database/dto/level.dto';
-import { downUtil, upUtil } from 'src/common/util/function.util';
+import { downUtil, getOrderMax, upUtil } from 'src/common/util/function.util';
 
 @Injectable()
 export class LevelService {
@@ -15,8 +15,9 @@ export class LevelService {
   ) { }
 
   async create(createLevelDto: CreateLevelDto) {
-    const createdItem = new this.levelModel(createLevelDto);
-    return await createdItem.save().catch(err => err);
+    let orderMax = await getOrderMax(this.levelModel);
+    const createdItem = new this.levelModel({ ...createLevelDto, order: ++orderMax });
+    return await createdItem.save();
   }
 
   async findAll(filter: SearchFilter) {
