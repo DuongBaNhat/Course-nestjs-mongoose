@@ -5,8 +5,8 @@ import { FilterQuery, Model } from 'mongoose';
 import { filter } from 'rxjs';
 import { Course, CourseDocument } from 'src/database/entities/course.schema';
 import { LessonDocument } from 'src/database/entities/lesson.schema';
-import { PaginationParam, toPaginationResponse } from 'src/database/util/pagination.util';
-import { SearchFilter } from 'src/database/util/search_util';
+import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
+import { SearchFilter } from 'src/common/util/search.util';
 import { CreateCourseDto, UpdateCourseDto } from '../../database/dto/course.dto';
 
 @Injectable()

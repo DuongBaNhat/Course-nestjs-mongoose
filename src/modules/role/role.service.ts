@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { Role, RoleDocument } from 'src/database/entities/role.schema';
-import { PaginationParams } from 'src/database/util/pagination.util';
+import { PaginationParams } from 'src/common/util/pagination.util';
 import { CreateRoleDto, UpdateRoleDto } from '../../database/dto/role.dto';
 
 @Injectable()

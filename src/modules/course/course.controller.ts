@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { CourseService } from './course.service';
 import { CreateCourseDto, UpdateCourseDto } from '../../database/dto/course.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { SearchFilter } from 'src/database/util/search_util';
+import { SearchFilter } from 'src/common/util/search.util';
 
 @ApiTags('course')
 @Controller('course')

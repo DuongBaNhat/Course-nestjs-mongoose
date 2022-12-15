@@ -2,8 +2,8 @@ import { Injectable, Query } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { Lesson, LessonDocument } from 'src/database/entities/lesson.schema';
-import { PaginationParam, toPaginationResponse } from 'src/database/util/pagination.util';
-import { SearchFilter } from 'src/database/util/search_util';
+import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
+import { SearchFilter } from 'src/common/util/search.util';
 import { CreateLessonDto, UpdateLessonDto } from '../../database/dto/lesson.dto';
 
 @Injectable()

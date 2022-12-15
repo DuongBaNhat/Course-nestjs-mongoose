@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { LessonService } from './lesson.service';
 import { LessonController } from './lesson.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { modules } from 'src/database/util/modules.util';
+import { modules } from 'src/common/util/modules.util';
 
 @Module({
   imports: [
