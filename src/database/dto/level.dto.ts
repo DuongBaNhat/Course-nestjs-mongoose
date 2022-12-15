@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsString, IsNotEmpty, IsNumber, Min } from "class-validator";
+import { IsString, IsNotEmpty, IsNumber, Min, IsOptional } from "class-validator";
 
 export class CreateLevelDto {
     @ApiProperty()
@@ -8,11 +8,14 @@ export class CreateLevelDto {
     @IsNotEmpty()
     name: string;
 
-    @ApiProperty({default: 1})
+
+}
+export class UpdateLevelDto extends PartialType(CreateLevelDto) {
+    @ApiProperty({ default: 1 })
     @Type(() => Number)
     @IsNumber()
     @Min(1)
-    order: number;
+    @IsOptional()
+    order?: number;
 }
-export class UpdateLevelDto extends PartialType(CreateLevelDto) {}
 

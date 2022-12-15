@@ -1,10 +1,10 @@
-import { Document, Types, Model } from "mongoose";
-import { async } from "rxjs";
+import { Document, Types, Model, FilterQuery } from "mongoose";
 import { Category, CategoryDocument } from "src/database/entities/category.schema";
+import { Level, LevelDocument } from "src/database/entities/level.schema";
 
-export const upUtil = async (modelUp: Category & Document<any, any, any> &
+export const upUtil = async (modelUp: (Category | Level) & Document<any, any, any> &
 { _id: Types.ObjectId; },
-    model: Model<CategoryDocument, {}, {}, {}, any>, id: string) => {
+    model: Model<CategoryDocument | LevelDocument, {}, {}, {}, any>, id: string) => {
     let orderUp = ++modelUp.order;
     let cateDowns = await model.find({ order: orderUp });
 
@@ -22,8 +22,8 @@ export const upUtil = async (modelUp: Category & Document<any, any, any> &
     return { up: upResult, down: downResult };
 }
 
-export const downUtil = async (objectDown: Category & Document<any, any, any> &
-{ _id: Types.ObjectId; }, model: Model<CategoryDocument, {}, {}, {}, any>, id: string) => {
+export const downUtil = async (objectDown: (Category | Level) & Document<any, any, any> &
+{ _id: Types.ObjectId; }, model: Model<CategoryDocument | LevelDocument, {}, {}, {}, any>, id: string) => {
     let orderUp = --objectDown.order;
     let cateUps = await model.find({ order: orderUp });
 
@@ -39,4 +39,21 @@ export const downUtil = async (objectDown: Category & Document<any, any, any> &
     }
 
     return { up: upResult, down: downResult };
+}
+
+export const createOrder = async (model: Model<Document, {}, {}, {}, any>) => {
+    let items = await model.find().sort({ order: 'desc' });
+    let result = items[0].get('order');
+    return ++result;
+}
+
+export const getOrderMax = async (model: Model<CategoryDocument | LevelDocument, {}, {}, {}, any>) => {
+    let items = await model.find().sort({ order: 'asc' });
+
+    let update = items.map(async (item, index) => {
+        return await model.findByIdAndUpdate(item._id, { order: index });
+    })
+    console.log(update.length);
+
+    return update.length - 1;
 }
