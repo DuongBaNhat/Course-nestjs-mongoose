@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto, UpdateCategoryDto } from '../../database/dto/category.dto';
+import { CreateCategoryDto, UpCategoryDto, UpdateCategoryDto } from '../../database/dto/category.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { SearchFilter } from 'src/database/util/search_util';
+import { SearchFilter } from 'src/common/util/search.util';
 
 @ApiTags('category')
 @Controller('category')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
@@ -33,4 +33,15 @@ export class CategoryController {
   remove(@Param('id') id: string) {
     return this.categoryService.remove(id);
   }
+
+  @Patch('up/:id')
+  up(@Param('id') id: string) {
+    return this.categoryService.up(id);
+  }
+
+  @Patch('down/:id')
+  down(@Param('id') id: string) {
+    return this.categoryService.down(id);
+  }
+
 }
