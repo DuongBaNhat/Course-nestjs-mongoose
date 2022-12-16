@@ -16,6 +16,7 @@ export class OrderService {
   async create(createOrderDto: CreateOrderDto) {
     const createdItem = new this.orderModel(createOrderDto);
     await createdItem.populate('items');
+    await createdItem.populate('promotions');
 
     return createdItem.save();
   }
@@ -45,7 +46,9 @@ export class OrderService {
   }
 
   async findOne(id: string) {
-    return await this.orderModel.findById(id).populate('items');
+    return await this.orderModel.findById(id)
+      .populate('items')
+      .populate('promotions');
   }
 
   async update(id: string, updateOrderDto: UpdateOrderDto) {
