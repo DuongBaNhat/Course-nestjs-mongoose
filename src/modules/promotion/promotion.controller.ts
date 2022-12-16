@@ -7,7 +7,7 @@ import { SearchFilter } from 'src/common/util/search.util';
 @ApiTags('promotion')
 @Controller('promotion')
 export class PromotionController {
-  constructor(private readonly promotionService: PromotionService) {}
+  constructor(private readonly promotionService: PromotionService) { }
 
   @Post()
   create(@Body() createPromotionDto: CreatePromotionDto) {
@@ -32,5 +32,10 @@ export class PromotionController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.promotionService.remove(id);
+  }
+
+  @Get('check/:id')
+  check(@Param('id') id: string) {
+    return this.promotionService.check(id);
   }
 }

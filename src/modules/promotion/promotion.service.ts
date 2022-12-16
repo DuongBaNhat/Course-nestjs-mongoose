@@ -8,6 +8,7 @@ import { CreatePromotionDto, UpdatePromotionDto } from '../../database/dto/promo
 
 @Injectable()
 export class PromotionService {
+
   constructor(
     @InjectModel(Promotion.name) private promotionModel: Model<PromotionDocument>,
   ) { }
@@ -52,5 +53,14 @@ export class PromotionService {
 
   async remove(id: string) {
     return await this.promotionModel.findByIdAndDelete(id);
+  }
+
+  async check(id: string) {
+    const promotion = await this.promotionModel.findById(id);
+    if (promotion && (promotion.status === 'active')) {
+      return { check: true };
+    }
+
+    return { check: false };
   }
 }

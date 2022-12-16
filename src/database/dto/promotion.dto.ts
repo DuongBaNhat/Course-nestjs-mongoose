@@ -8,13 +8,28 @@ export class CreatePromotionDto {
     name: string;
 
     @ApiProperty()
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    value: number;
+    code: string;
 
     @ApiProperty()
     @IsDateString()
     @IsNotEmpty()
     date: Date;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    status: string;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    percent: number;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    fixed: number;
 }
-export class UpdatePromotionDto extends PartialType(CreatePromotionDto) {}
+export class UpdatePromotionDto extends PartialType(CreatePromotionDto) { }
