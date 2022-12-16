@@ -12,6 +12,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { CourseModule } from './modules/course/course.module';
 import { OrderItemsModule } from './modules/order_items/order_items.module';
 import { OrderModule } from './modules/order/order.module';
+import { PromotionModule } from './modules/promotion/promotion.module';
 
 function myFunction(arg: CategoryModule) {
   console.log(getConfig());
@@ -27,6 +28,7 @@ function myFunction(arg: CategoryModule) {
     CourseModule,
     OrderModule,
     OrderItemsModule,
+    PromotionModule,
   ],
   controllers: [AppController],
   providers: [
