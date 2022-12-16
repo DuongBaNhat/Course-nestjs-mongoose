@@ -8,6 +8,7 @@ import { Order, OrderDocument } from 'src/database/entities/order.schema';
 
 @Injectable()
 export class OrderService {
+
   constructor(
     @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
   ) { }
@@ -15,7 +16,7 @@ export class OrderService {
   async create(createOrderDto: CreateOrderDto) {
     const createdItem = new this.orderModel(createOrderDto);
     await createdItem.populate('items');
-    
+
     return createdItem.save();
   }
 
@@ -53,5 +54,10 @@ export class OrderService {
 
   async remove(id: string) {
     return await this.orderModel.findByIdAndDelete(id);
+  }
+
+  async pay(id: string) {
+    const status = 'success';
+    return await this.orderModel.findByIdAndUpdate(id, { status: status });
   }
 }

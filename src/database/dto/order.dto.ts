@@ -15,7 +15,7 @@ export class CreateOrderDto {
     @IsOptional()
     items: string[];
 
-    @ApiProperty()
+    @ApiProperty({default: 'proccessing'})
     @IsString()
     @IsNotEmpty()
     status: string;
@@ -26,9 +26,12 @@ export class CreateOrderDto {
     total: number;
 
     @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    discount: string;
+    @IsArray()
+    @ArrayNotEmpty()
+    @IsString({ each: true })
+    @IsNotEmpty({ each: true })
+    @IsOptional()
+    promotions: string[];
 
     @ApiProperty()
     @IsString()

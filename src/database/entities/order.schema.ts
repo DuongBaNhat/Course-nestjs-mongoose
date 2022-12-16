@@ -3,6 +3,7 @@ import { Transform, Type } from 'class-transformer';
 import * as mongoose from 'mongoose';
 import { Document, ObjectId } from 'mongoose';
 import { OrderItem } from './order_items.schema';
+import { Promotion } from './promotion.schema';
 
 export type OrderDocument = Order & Document;
 
@@ -20,14 +21,17 @@ export class Order {
     @Type(() => OrderItem)
     items: OrderItem;
 
+    @Prop({
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: Promotion.name }],
+    })
+    @Type(() => Promotion)
+    promotions: Promotion;
+
     @Prop()
     status: string;
 
     @Prop()
     total: number;
-
-    @Prop()
-    discount: string;
 
     @Prop()
     email: string;

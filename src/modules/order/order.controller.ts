@@ -33,4 +33,9 @@ export class OrderController {
   remove(@Param('id') id: string) {
     return this.orderService.remove(id);
   }
+
+  @Patch('pay/:id')
+  pay(@Param('id') id: string) {
+    return this.orderService.pay(id);
+  }
 }
