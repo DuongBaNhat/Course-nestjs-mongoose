@@ -15,7 +15,7 @@ export class CreateOrderDto {
     @IsOptional()
     items: string[];
 
-    @ApiProperty({default: 'proccessing'})
+    @ApiProperty({ default: 'proccessing' })
     @IsString()
     @IsNotEmpty()
     status: string;
@@ -48,6 +48,10 @@ export class CreateOrderDto {
     @IsNotEmpty()
     date: Date;
 
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    payment: string;
 }
 export class UpdateOrderDto extends PartialType(CreateOrderDto) { }
 

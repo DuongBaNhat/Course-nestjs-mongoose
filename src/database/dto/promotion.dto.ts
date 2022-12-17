@@ -15,21 +15,26 @@ export class CreatePromotionDto {
     @ApiProperty()
     @IsDateString()
     @IsNotEmpty()
-    date: Date;
+    startDate: Date;
 
     @ApiProperty()
+    @IsDateString()
+    @IsNotEmpty()
+    endDate: Date;
+
+    @ApiProperty({default: 'active'})
     @IsString()
     @IsNotEmpty()
     status: string;
 
-    @ApiProperty()
-    @IsNumber()
+    @ApiProperty({default: 'percent'})
+    @IsString()
     @IsNotEmpty()
-    percent: number;
+    type: string;
 
     @ApiProperty()
     @IsNumber()
     @IsNotEmpty()
-    fixed: number;
+    value: number;
 }
 export class UpdatePromotionDto extends PartialType(CreatePromotionDto) { }

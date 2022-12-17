@@ -16,16 +16,19 @@ export class Promotion {
     code: string;
 
     @Prop()
-    date: Date;
+    startDate: Date;
+
+    @Prop()
+    endDate: Date;
 
     @Prop()
     status: string;
 
     @Prop()
-    percent: number;
+    type: string;
 
     @Prop()
-    fixed: number;
+    value: number;
 }
 const PromotionSchema = SchemaFactory.createForClass(Promotion);
 PromotionSchema.index({ name: 'text' });

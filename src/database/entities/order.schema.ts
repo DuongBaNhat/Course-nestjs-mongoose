@@ -42,6 +42,8 @@ export class Order {
     @Prop()
     date: string;
 
+    @Prop()
+    payment: string;
 }
 const OrderSchema = SchemaFactory.createForClass(Order);
 OrderSchema.index({ name: 'text' });
