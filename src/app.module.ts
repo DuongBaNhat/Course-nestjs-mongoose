@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PermissionModule } from './modules/permission/permission.module';
 import { RoleModule } from './modules/role/role.module';
-import { APP_FILTER } from '@nestjs/core';
 import { LevelModule } from './modules/level/level.module';
 import { LessonModule } from './modules/lesson/lesson.module';
 import { CategoryModule } from './modules/category/category.module';
@@ -13,6 +12,13 @@ import { CourseModule } from './modules/course/course.module';
 import { OrderItemsModule } from './modules/order_items/order_items.module';
 import { OrderModule } from './modules/order/order.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
+
+import { ConfigModule } from '@nestjs/config';
+import { ChargeModule } from './modules/charge/charge.module';
+// import Joi from 'joi';
+import * as Joi from '@hapi/joi';
+import StripeService from './modules/stripe/stripe.service';
+import { CustomerModule } from './modules/customer/customer.module';
 
 function myFunction(arg: CategoryModule) {
   console.log(getConfig());
@@ -28,11 +34,23 @@ function myFunction(arg: CategoryModule) {
     CourseModule,
     OrderModule,
     OrderItemsModule,
-    PromotionModule,
+    PromotionModule,   
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: Joi.object({
+        STRIPE_SECRET_KEY: Joi.string(),
+        STRIPE_CURRENCY: Joi.string(),
+        FRONTEND_URL: Joi.string(),
+        // ...
+      })
+    }),
+    CustomerModule,
+    ChargeModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    StripeService,
     {
       provide: 'ABC',
       useFactory: myFunction,
@@ -43,8 +61,8 @@ function myFunction(arg: CategoryModule) {
         }
       ]
     },
-   
+
   ],
-  
+
 })
-export class AppModule {}
+export class AppModule { }
