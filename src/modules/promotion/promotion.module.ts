@@ -11,6 +11,7 @@ import { modules } from 'src/common/util/modules.util';
     ])
   ],
   controllers: [PromotionController],
-  providers: [PromotionService]
+  providers: [PromotionService],
+  // exports: [PromotionService],
 })
 export class PromotionModule {}

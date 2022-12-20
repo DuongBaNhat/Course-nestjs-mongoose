@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getConfig } from 'config/server';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PermissionModule } from './modules/permission/permission.module';
 import { RoleModule } from './modules/role/role.module';
 import { LevelModule } from './modules/level/level.module';
@@ -14,8 +12,6 @@ import { OrderModule } from './modules/order/order.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 
 import { ConfigModule } from '@nestjs/config';
-import { ChargeModule } from './modules/charge/charge.module';
-// import Joi from 'joi';
 import * as Joi from '@hapi/joi';
 import StripeService from './modules/stripe/stripe.service';
 import { CustomerModule } from './modules/customer/customer.module';
@@ -45,11 +41,9 @@ function myFunction(arg: CategoryModule) {
       })
     }),
     CustomerModule,
-    ChargeModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     StripeService,
     {
       provide: 'ABC',
