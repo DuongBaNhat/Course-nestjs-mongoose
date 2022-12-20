@@ -47,11 +47,53 @@ export class CreateOrderDto {
     @IsDateString()
     @IsNotEmpty()
     date: Date;
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    @IsOptional()
+    payment: number;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    @IsOptional()
+    fee: number;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    @IsOptional()
+    net: number;
+}
+export class UpdateOrderDto extends PartialType(CreateOrderDto) { }
+
+class StripeDto {
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    amount: number;
 
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    payment: string;
+    @IsOptional()
+    description: string
+
 }
-export class UpdateOrderDto extends PartialType(CreateOrderDto) { }
+
+export class CreateStripeDto extends StripeDto {
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    orderId: string;
+}
+
+export class CreateStripe extends StripeDto {
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    @IsOptional()
+    payment_method: string
+}
+
 

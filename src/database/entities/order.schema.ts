@@ -40,10 +40,16 @@ export class Order {
     address: string;
 
     @Prop()
-    date: string;
+    date: Date;
 
     @Prop()
-    payment: string;
+    payment: number;
+
+    @Prop()
+    fee: number;
+
+    @Prop()
+    net: number; 
 }
 const OrderSchema = SchemaFactory.createForClass(Order);
 OrderSchema.index({ name: 'text' });

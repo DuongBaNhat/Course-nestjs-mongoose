@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SearchFilter } from 'src/common/util/search.util';
+import { CreateChargeDto } from 'src/database/dto/charge.dto';
 import { CreateOrderDto, UpdateOrderDto } from 'src/database/dto/order.dto';
 import { OrderService } from './order.service';
 
@@ -8,7 +9,10 @@ import { OrderService } from './order.service';
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) { }
-
+  // @Get('listPayments')
+  listPayments() {
+    return this.orderService.listPayments();
+  }
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.orderService.create(createOrderDto);
@@ -20,7 +24,7 @@ export class OrderController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.orderService.findOne(id);
   }
 
@@ -34,8 +38,18 @@ export class OrderController {
     return this.orderService.remove(id);
   }
 
-  @Patch('pay/:id')
-  pay(@Param('id') id: string) {
-    return this.orderService.pay(id);
+  @Get('cards/:stripeCustomerId')
+  listCreditCards(@Param('stripeCustomerId') stripeCustomerId: string) {
+    return this.orderService.listCreditCards(stripeCustomerId);
   }
+
+  @Patch('pay/:customerId')
+  async pay(
+    @Param('customerId') customerId: string,
+    @Body() createChargeDto: CreateChargeDto,
+  ) {
+    return this.orderService.pay(customerId, createChargeDto);
+  }
+
+
 }
