@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
 import { SearchFilter } from 'src/common/util/search.util';
-import { CreateChargeDto } from 'src/database/dto/charge.dto';
-import { CreateOrderDto, CreateStripe, UpdateOrderDto } from 'src/database/dto/order.dto';
+import { CreateOrderDto, UpdateOrderDto } from 'src/database/dto/order.dto';
+import { CreateStripe, CreateStripeDto } from 'src/database/dto/stripe.dto';
 import { Order, OrderDocument } from 'src/database/entities/order.schema';
 import { CustomerService } from '../customer/customer.service';
 import { PromotionService } from '../promotion/promotion.service';
@@ -81,9 +81,9 @@ export class OrderService {
 
   async pay(
     customerId: string,
-    createChargeDto: CreateChargeDto,
+    createStripeDto: CreateStripeDto,
   ) {
-    const { orderId, ...stripeDto } = createChargeDto;
+    const { orderId, ...stripeDto } = createStripeDto;
     const customer = await this.customerService.findOne(customerId);
     if (!customer) {
       return customer;

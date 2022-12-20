@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SearchFilter } from 'src/common/util/search.util';
-import { CreateChargeDto } from 'src/database/dto/charge.dto';
+// import { CreateChargeDto } from 'src/database/dto/charge.dto';
 import { CreateOrderDto, UpdateOrderDto } from 'src/database/dto/order.dto';
+import { CreateStripeDto } from 'src/database/dto/stripe.dto';
 import { OrderService } from './order.service';
 
 @ApiTags('order')
@@ -46,9 +47,9 @@ export class OrderController {
   @Patch('pay/:customerId')
   async pay(
     @Param('customerId') customerId: string,
-    @Body() createChargeDto: CreateChargeDto,
+    @Body() createStripeDto: CreateStripeDto,
   ) {
-    return this.orderService.pay(customerId, createChargeDto);
+    return this.orderService.pay(customerId, createStripeDto);
   }
 
 
