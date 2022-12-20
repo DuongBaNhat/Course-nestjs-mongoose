@@ -1,9 +1,8 @@
 
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AddCreditCardDto, CreateChargeDto } from 'src/database/dto/charge.dto';
 import { CardDto } from 'src/database/dto/customer.dto';
-import { CreateStripe } from 'src/database/dto/order.dto';
+import { CreateStripe } from 'src/database/dto/stripe.dto';
 import Stripe from 'stripe';
 
 @Injectable()
@@ -57,23 +56,23 @@ export default class StripeService {
         return pay;
     }
 
-    attachCreditCard(addCreditCardDto: AddCreditCardDto, stripeCustomerId: string) {
-        return this.stripe.setupIntents.create({
-            payment_method: addCreditCardDto.payment_method,
-            customer: stripeCustomerId,
-        })
-    }
+    // attachCreditCard(addCreditCardDto: AddCreditCardDto, stripeCustomerId: string) {
+    //     return this.stripe.setupIntents.create({
+    //         payment_method: addCreditCardDto.payment_method,
+    //         customer: stripeCustomerId,
+    //     })
+    // }
 
 
-    async chargeBySavedCard(createChargeDto: CreateChargeDto, stripeCustomerId: string) {
-        return this.stripe.paymentIntents.create({
-            ...createChargeDto,
-            customer: stripeCustomerId,
-            currency: this.configService.get('STRIPE_CURRENCY'),
-            off_session: true,
-            confirm: true
-        })
-    }
+    // async chargeBySavedCard(createChargeDto: CreateChargeDto, stripeCustomerId: string) {
+    //     return this.stripe.paymentIntents.create({
+    //         ...createChargeDto,
+    //         customer: stripeCustomerId,
+    //         currency: this.configService.get('STRIPE_CURRENCY'),
+    //         off_session: true,
+    //         confirm: true
+    //     })
+    // }
     async listCreditCards(stripeCustomerId: string) {
         const cards = await this.stripe.paymentMethods.list({
             customer: stripeCustomerId,
