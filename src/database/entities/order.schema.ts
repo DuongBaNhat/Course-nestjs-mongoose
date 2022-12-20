@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform, Type } from 'class-transformer';
 import * as mongoose from 'mongoose';
 import { Document, ObjectId } from 'mongoose';
+import { Customer } from './customer.schema';
 import { OrderItem } from './order_items.schema';
 import { Promotion } from './promotion.schema';
 
@@ -27,6 +28,12 @@ export class Order {
     @Type(() => Promotion)
     promotions: Promotion;
 
+    @Prop({
+        type: mongoose.Schema.Types.ObjectId, ref: Customer.name,
+    })
+    @Type(() => Customer)
+    customer: Customer;
+
     @Prop()
     status: string;
 
@@ -49,7 +56,13 @@ export class Order {
     fee: number;
 
     @Prop()
-    net: number; 
+    net: number;
+
+    @Prop()
+    charge: string;
+
+    @Prop()
+    refund: string;
 }
 const OrderSchema = SchemaFactory.createForClass(Order);
 OrderSchema.index({ name: 'text' });

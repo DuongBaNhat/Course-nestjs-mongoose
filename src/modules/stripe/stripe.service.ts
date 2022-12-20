@@ -28,7 +28,7 @@ export default class StripeService {
 
         return card;
     }
-    
+
     async createCustomer(name: string, email: string) {
         return this.stripe.customers.create({
             name,
@@ -55,6 +55,7 @@ export default class StripeService {
 
         return pay;
     }
+
 
     // attachCreditCard(addCreditCardDto: AddCreditCardDto, stripeCustomerId: string) {
     //     return this.stripe.setupIntents.create({
@@ -101,4 +102,13 @@ export default class StripeService {
     async listPayments() {
         return await this.stripe.balanceTransactions.list({});
     }
+
+    async refund(charge: string) {
+        const refund = await this.stripe.refunds.create({
+            charge: charge,
+        });
+
+        return refund;
+    }
+
 }

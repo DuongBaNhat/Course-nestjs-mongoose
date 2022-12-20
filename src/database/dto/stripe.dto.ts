@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { IsNotEmpty, IsNumber, IsString, IsOptional } from "class-validator";
 
 class StripeDto {
@@ -22,6 +22,12 @@ export class CreateStripeDto extends StripeDto {
     orderId: string;
 }
 
+export class CreateStripeRefundDto extends PartialType(StripeDto) {
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    orderId: string;
+}
 export class CreateStripe extends StripeDto {
     @ApiProperty()
     @IsString()

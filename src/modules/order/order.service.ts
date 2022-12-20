@@ -4,7 +4,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
 import { SearchFilter } from 'src/common/util/search.util';
 import { CreateOrderDto, UpdateOrderDto } from 'src/database/dto/order.dto';
-import { CreateStripe, CreateStripeDto } from 'src/database/dto/stripe.dto';
+import { CreateStripe, CreateStripeDto, CreateStripeRefundDto } from 'src/database/dto/stripe.dto';
 import { Order, OrderDocument } from 'src/database/entities/order.schema';
 import { CustomerService } from '../customer/customer.service';
 import { PromotionService } from '../promotion/promotion.service';
@@ -95,6 +95,7 @@ export class OrderService {
       description: stripeDto.description,
     }
     const pay = await this.stripeService.pay(customer.stripeCustomerId, createStripe);
+    console.log(pay.status);
 
     //database
     if (pay && pay.status === 'succeeded') {
@@ -103,6 +104,7 @@ export class OrderService {
         payment: pay.latest_charge.balance_transaction.amount,
         fee: pay.latest_charge.balance_transaction.fee,
         net: pay.latest_charge.balance_transaction.net,
+        charge: pay.latest_charge.id,
       }
 
       return await this.update(orderId, updateOrderDto)
@@ -113,4 +115,27 @@ export class OrderService {
   async listPayments() {
     return this.stripeService.listPayments();
   }
+
+  async refund(charge: string, createStripeRefundDto: CreateStripeRefundDto) {
+    const { orderId, ...stripeRefundDto } = createStripeRefundDto;
+
+    const refund = await this.stripeService.refund(charge);
+
+    //database
+    if (refund && refund.status === 'succeeded') {
+      const updateOrderDto: UpdateOrderDto = {
+        status: refund.object,
+        payment: 0,
+        net: 0,
+        refund: refund.id,
+      }
+
+      console.log(refund);
+
+      return await this.update(orderId, updateOrderDto)
+    }
+
+    return refund;
+  }
+
 }

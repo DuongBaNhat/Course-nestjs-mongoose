@@ -36,6 +36,11 @@ export class CreateOrderDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
+    customer: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     email: string;
 
     @ApiProperty()
@@ -46,6 +51,7 @@ export class CreateOrderDto {
     @ApiProperty()
     @IsDateString()
     @IsNotEmpty()
+
     date: Date;
     @ApiProperty()
     @IsNumber()
@@ -64,5 +70,17 @@ export class CreateOrderDto {
     @IsNotEmpty()
     @IsOptional()
     net: number;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    @IsOptional()
+    charge: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    @IsOptional()
+    refund: string;
 }
 export class UpdateOrderDto extends PartialType(CreateOrderDto) { }
