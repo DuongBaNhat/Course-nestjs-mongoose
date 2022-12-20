@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateCustomerDto, UpdateCustomerDto } from 'src/database/dto/customer.dto';
+import { CardDto, CreateCustomerDto, UpdateCustomerDto } from 'src/database/dto/customer.dto';
 
 @ApiTags('customer')
 @Controller('customer')
@@ -11,6 +11,11 @@ export class CustomerController {
   @Post()
   create(@Body() createCustomerDto: CreateCustomerDto) {
     return this.customerService.create(createCustomerDto);
+  }
+
+  @Post('add-card/:id')
+  addCard(@Param('id') id: string, @Body() cardDto: CardDto) {
+    return this.customerService.addCard(id, cardDto);
   }
 
   @Get()

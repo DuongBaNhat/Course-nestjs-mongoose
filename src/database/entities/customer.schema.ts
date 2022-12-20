@@ -21,7 +21,7 @@ export class Customer {
     public stripeCustomerId: string;
 
     @Prop()
-    public paymentMethodId: string;
+    public paymentMethodIds: string[];
     // ...
 }
 
