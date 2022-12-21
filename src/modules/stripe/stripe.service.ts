@@ -104,9 +104,13 @@ export default class StripeService {
     }
 
     async refund(charge: string) {
-        const refund = await this.stripe.refunds.create({
+        const refundParam: Stripe.RefundCreateParams = {
+            // amount: 100,
             charge: charge,
-        });
+            // reason: 'duplicate'
+        }
+
+        const refund = await this.stripe.refunds.create(refundParam);
 
         return refund;
     }

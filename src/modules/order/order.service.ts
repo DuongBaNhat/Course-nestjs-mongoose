@@ -130,12 +130,28 @@ export class OrderService {
         refund: refund.id,
       }
 
-      console.log(refund);
-
       return await this.update(orderId, updateOrderDto)
     }
 
     return refund;
   }
+
+  async getListCourse(customerId: string) {
+    let filters: FilterQuery<OrderDocument> = {
+      status: 'succeeded',
+      customer: customerId,
+    };
+
+    let query = await this.orderModel.find(filters).populate('items').select({ items: 1 });
+
+    let result = query.map(v => {
+      return v.items;
+    })
+    const content = result.flat();
+    const total = content.length;
+
+    return { content, total };
+  }
+
 
 }

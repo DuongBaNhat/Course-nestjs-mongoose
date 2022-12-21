@@ -24,6 +24,11 @@ export class OrderController {
     return this.orderService.findAll(filter);
   }
 
+  @Get('list-course/:customerId')
+  getListCourse(@Param('customerId') customerId: string) {
+    return this.orderService.getListCourse(customerId);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.orderService.findOne(id);
@@ -56,5 +61,6 @@ export class OrderController {
   refund(@Param('charge') charge: string, @Body() createStripeRefundDto: CreateStripeRefundDto) {
     return this.orderService.refund(charge, createStripeRefundDto);
   }
+
 
 }
