@@ -5,6 +5,7 @@ import { PaginationParam, toPaginationResponse } from 'src/common/util/paginatio
 import { SearchFilter } from 'src/common/util/search.util';
 import { CreateOrderDto, UpdateOrderDto } from 'src/database/dto/order.dto';
 import { CreateStripe, CreateStripeDto, CreateStripeRefundDto } from 'src/database/dto/stripe.dto';
+import { Course, CourseDocument } from 'src/database/entities/course.schema';
 import { Order, OrderDocument } from 'src/database/entities/order.schema';
 import { CustomerService } from '../customer/customer.service';
 import { PromotionService } from '../promotion/promotion.service';
@@ -18,6 +19,7 @@ export class OrderService {
     private promotionService: PromotionService,
     private readonly stripeService: StripeService,
     private readonly customerService: CustomerService,
+    @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
   ) { }
 
   async create(createOrderDto: CreateOrderDto) {
@@ -142,16 +144,21 @@ export class OrderService {
       customer: customerId,
     };
 
-    let query = await this.orderModel.find(filters).populate('items').select({ items: 1 });
+    // let query = await this.orderModel.find(filters).populate('items').select({ items: 1 });
+    let query = await this.orderModel.find(filters, 'items').populate('items');
 
     let result = query.map(v => {
       return v.items;
     })
     const content = result.flat();
-    const total = content.length;
+    const courseIds = content.map(c => {
+      return c.idItem;
+    })
 
-    return { content, total };
+    const courses = await this.courseModel.find({_id: courseIds});
+    const total = courses.length;
+
+    return { courses, total };
   }
-
 
 }

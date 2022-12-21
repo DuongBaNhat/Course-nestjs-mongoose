@@ -3,18 +3,32 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
 import { SearchFilter } from 'src/common/util/search.util';
-import { CreateOrderItemDto, UpdateOrderItemDto } from 'src/database/dto/order_item.dto';
+import { CreateOrderDto } from 'src/database/dto/order.dto';
+import { CreateOrderItem, CreateOrderItemDto, UpdateOrderItemDto } from 'src/database/dto/order_item.dto';
 import { OrderItem, OrderItemDocument } from 'src/database/entities/order_items.schema';
+import { CourseService } from '../course/course.service';
 
 @Injectable()
 export class OrderItemsService {
   constructor(
     @InjectModel(OrderItem.name) private orderItemModel: Model<OrderItemDocument>,
+    private courseService: CourseService,
   ) { }
 
 
   async create(createOrderItemDto: CreateOrderItemDto) {
-    const createdItem = new this.orderItemModel(createOrderItemDto);
+    const { idItem, amount } = createOrderItemDto;
+    const item = await this.courseService.findOne(idItem);
+    if (!item) {
+      return item;
+    }
+    const param: CreateOrderItem = {
+      idItem: idItem,
+      name: item.name,
+      amount: amount,
+      price: item.price
+    }
+    const createdItem = new this.orderItemModel(param);
     return createdItem.save();
   }
 
