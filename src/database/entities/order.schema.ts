@@ -23,10 +23,10 @@ export class Order {
     items: OrderItem;
 
     @Prop({
-        type: [{ type: mongoose.Schema.Types.ObjectId, ref: Promotion.name }],
+        type: mongoose.Schema.Types.ObjectId, ref: Promotion.name,
     })
     @Type(() => Promotion)
-    promotions: Promotion;
+    promotion: Promotion;
 
     @Prop({
         type: mongoose.Schema.Types.ObjectId, ref: Customer.name,

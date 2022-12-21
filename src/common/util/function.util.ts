@@ -41,11 +41,11 @@ export const downUtil = async (objectDown: (Category | Level) & Document<any, an
     return { up: upResult, down: downResult };
 }
 
-export const createOrder = async (model: Model<Document, {}, {}, {}, any>) => {
-    let items = await model.find().sort({ order: 'desc' });
-    let result = items[0].get('order');
-    return ++result;
-}
+// export const createOrder = async (model: Model<Document, {}, {}, {}, any>) => {
+//     let items = await model.find().sort({ order: 'desc' });
+//     let result = items[0].get('order');
+//     return ++result;
+// }
 
 export const getOrderMax = async (model: Model<CategoryDocument | LevelDocument, {}, {}, {}, any>) => {
     let items = await model.find().sort({ order: 'asc' });
@@ -57,3 +57,4 @@ export const getOrderMax = async (model: Model<CategoryDocument | LevelDocument,
 
     return update.length - 1;
 }
+

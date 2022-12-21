@@ -57,8 +57,6 @@ export class PromotionService {
 
   async check(id: string) {
     const promotion = await this.promotionModel.findById(id);
-    // console.log(promotion.status);
-    
     if (promotion && (promotion.status === 'active')) {
       return true;
     }

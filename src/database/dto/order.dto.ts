@@ -26,12 +26,12 @@ export class CreateOrderDto {
     total: number;
 
     @ApiProperty()
-    @IsArray()
-    @ArrayNotEmpty()
-    @IsString({ each: true })
-    @IsNotEmpty({ each: true })
+    // @IsArray()
+    // @ArrayNotEmpty()
+    @IsString()
+    @IsNotEmpty()
     @IsOptional()
-    promotions: string[];
+    promotion: string;
 
     @ApiProperty()
     @IsString()

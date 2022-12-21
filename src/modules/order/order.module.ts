@@ -6,6 +6,8 @@ import { modules } from 'src/common/util/modules.util';
 import { PromotionService } from '../promotion/promotion.service';
 import StripeService from '../stripe/stripe.service';
 import { CustomerService } from '../customer/customer.service';
+import { OrderItemsService } from '../order_items/order_items.service';
+import { CourseService } from '../course/course.service';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import { CustomerService } from '../customer/customer.service';
     ])
   ],
   controllers: [OrderController],
-  providers: [OrderService, PromotionService, StripeService, CustomerService]
+  providers: [OrderService, PromotionService, 
+    StripeService, CustomerService, OrderItemsService, CourseService]
 })
 export class OrderModule { }

@@ -67,4 +67,16 @@ export class OrderItemsService {
   async remove(id: string) {
     return await this.orderItemModel.findByIdAndDelete(id);
   }
+
+  async getTotal(itemId: string[]) {
+    const items = await this.orderItemModel.find({_id: itemId});
+    let total = 10;
+    for(let item of items) {
+      total += item.amount * item.price;
+    }
+
+    console.log(items);
+    
+    return total;
+  }
 }

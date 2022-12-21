@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
@@ -8,6 +8,7 @@ import { CreateStripe, CreateStripeDto, CreateStripeRefundDto } from 'src/databa
 import { Course, CourseDocument } from 'src/database/entities/course.schema';
 import { Order, OrderDocument } from 'src/database/entities/order.schema';
 import { CustomerService } from '../customer/customer.service';
+import { OrderItemsService } from '../order_items/order_items.service';
 import { PromotionService } from '../promotion/promotion.service';
 import StripeService from '../stripe/stripe.service';
 
@@ -19,20 +20,17 @@ export class OrderService {
     private promotionService: PromotionService,
     private readonly stripeService: StripeService,
     private readonly customerService: CustomerService,
+    private readonly orderItemsService: OrderItemsService,
     @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
   ) { }
 
   async create(createOrderDto: CreateOrderDto) {
-    const { promotions } = createOrderDto;
+    const { promotion } = createOrderDto;
 
-    createOrderDto.promotions = [];
-    for (let p of promotions) {
-      const isActive = await this.promotionService.check(p);
-      if (isActive) {
-        createOrderDto.promotions.push(p)
-      }
+    const isActive = await this.promotionService.check(promotion);
+    if (!isActive) {
+      throw new BadRequestException(promotion);
     }
-
     const createdItem = new this.orderModel(createOrderDto);
     await createdItem.populate('items');
 
@@ -66,7 +64,7 @@ export class OrderService {
   async findOne(id: string) {
     return await this.orderModel.findById(id)
       .populate('items')
-      .populate('promotions');
+      .populate('promotion');
   }
 
   async update(id: string, updateOrderDto: UpdateOrderDto) {
@@ -86,6 +84,16 @@ export class OrderService {
     createStripeDto: CreateStripeDto,
   ) {
     const { orderId, ...stripeDto } = createStripeDto;
+    const order = await this.findOne(orderId);
+    if (!order) {
+      return order;
+    }
+    const promotionId = order.promotion._id.toString()
+    const isPromotion = await this.promotionService.check(promotionId);
+    if (!isPromotion) {
+      throw new BadRequestException(promotionId);
+    }
+    
     const customer = await this.customerService.findOne(customerId);
     if (!customer) {
       return customer;
@@ -97,7 +105,6 @@ export class OrderService {
       description: stripeDto.description,
     }
     const pay = await this.stripeService.pay(customer.stripeCustomerId, createStripe);
-    console.log(pay.status);
 
     //database
     if (pay && pay.status === 'succeeded') {
@@ -144,8 +151,8 @@ export class OrderService {
       customer: customerId,
     };
 
-    // let query = await this.orderModel.find(filters).populate('items').select({ items: 1 });
-    let query = await this.orderModel.find(filters, 'items').populate('items');
+    let query = await this.orderModel.find(filters).populate('items').select({ items: 1 });
+    // let query = await this.orderModel.find(filters, 'items').populate('items');
 
     let result = query.map(v => {
       return v.items;
@@ -155,7 +162,7 @@ export class OrderService {
       return c.idItem;
     })
 
-    const courses = await this.courseModel.find({_id: courseIds});
+    const courses = await this.courseModel.find({ _id: courseIds });
     const total = courses.length;
 
     return { courses, total };

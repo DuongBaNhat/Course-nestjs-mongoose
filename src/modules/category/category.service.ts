@@ -5,7 +5,7 @@ import { Category, CategoryDocument } from 'src/database/entities/category.schem
 import { PaginationParam, toPaginationResponse } from 'src/common/util/pagination.util';
 import { SearchFilter } from 'src/common/util/search.util';
 import { CreateCategoryDto, UpdateCategoryDto } from '../../database/dto/category.dto';
-import { downUtil, upUtil, createOrder, getOrderMax } from 'src/common/util/function.util';
+import { downUtil, upUtil, getOrderMax } from 'src/common/util/function.util';
 
 @Injectable()
 export class CategoryService {
