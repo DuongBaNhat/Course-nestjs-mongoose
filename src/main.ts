@@ -10,10 +10,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Project permission')
+    .setTitle(process.env.PROJECT_NAME)
     .setDescription('The mongodb-stripe API description')
     .setVersion('1.0')
-    .addTag('permission')
+    // .addTag('permission')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
@@ -32,6 +32,6 @@ async function bootstrap() {
     origin: configService.get('FRONTEND_URL'),
     credentials: true
   });
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
