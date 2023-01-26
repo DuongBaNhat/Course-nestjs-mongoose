@@ -51,10 +51,10 @@ export const getOrderMax = async (model: Model<CategoryDocument | LevelDocument,
     let items = await model.find().sort({ order: 'asc' });
 
     let update = items.map(async (item, index) => {
-        return await model.findByIdAndUpdate(item._id, { order: index });
+        return await model.findByIdAndUpdate(item._id, { order: ++index });
     })
     console.log(update.length);
 
-    return update.length - 1;
+    return update.length;
 }
 

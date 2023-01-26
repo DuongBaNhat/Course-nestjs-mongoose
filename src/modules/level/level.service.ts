@@ -65,6 +65,10 @@ export class LevelService {
     if (!cateUp) {
       throw new BadRequestException('Not found');
     }
+    const orderMax = await getOrderMax(this.levelModel);
+    if (cateUp.order >= orderMax) {
+      throw new BadRequestException();
+    }
 
     return await upUtil(cateUp, this.levelModel, id);
   }
@@ -75,6 +79,9 @@ export class LevelService {
       throw new BadRequestException('Not found');
     }
 
+    if (cateDown.order <= 1) {
+      throw new BadRequestException();
+    }
     return await downUtil(cateDown, this.levelModel, id);
   }
 }
